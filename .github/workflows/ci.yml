@@ -1,4 +1,4 @@
-name: CI - Unit, BDD, Pages
+name: CI - Unit, BDD, Pages (Transport)
 
 on:
   push:
@@ -26,15 +26,15 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore (solution)
+      - name: Restore solution
         run: dotnet restore examen-2025-ii-si784-u2-JMedina255.sln
 
-      - name: Build (solution)
-        run: dotnet build examen-2025-ii-si784-u2-JMedina255.sln --no-restore -c Release
+      - name: Build solution
+        run: dotnet build examen-2025-ii-si784-u2-JMedina255.sln -c Release --no-restore
 
       - name: Unit tests with coverage (gate 80%)
         run: |
-          dotnet test tests/App.UnitTests/App.UnitTests.csproj \
+          dotnet test tests/Transport.UnitTests/Transport.UnitTests.csproj \
             -c Release --no-build \
             --logger "trx;LogFileName=unit-tests.trx" \
             /p:CollectCoverage=true \
@@ -42,10 +42,10 @@ jobs:
             /p:CoverletOutputFormat="cobertura,lcov" \
             /p:Threshold=80 \
             /p:ThresholdType=line \
-            /p:Include="[App.Core]*"
+            /p:Include="[Transport.Core]*"
 
       - name: BDD tests
-        run: dotnet test tests/App.BDD/App.BDD.csproj -c Release --no-build --logger "trx;LogFileName=bdd-tests.trx"
+        run: dotnet test tests/Transport.BDD/Transport.BDD.csproj -c Release --no-build --logger "trx;LogFileName=bdd-tests.trx"
 
       - name: Install reporting tools
         run: |
@@ -62,9 +62,8 @@ jobs:
         shell: bash
         run: |
           mkdir -p docs/bdd
-          DLL=$(find tests/App.BDD -type f -name 'App.BDD.dll' | head -n 1)
-          JSON=$(find tests/App.BDD -type f -name 'TestExecution.json' | head -n 1)
-          if [ -z "$JSON" ]; then JSON=$(find tests/App.BDD -path '*/TestResults/*/TestExecution.json' | head -n 1); fi
+          DLL=$(find tests/Transport.BDD -type f -name 'Transport.BDD.dll' | head -n 1)
+          JSON=$(find tests/Transport.BDD -path '*/TestResults/*/TestExecution.json' | head -n 1)
           livingdoc test-assembly "$DLL" -t "$JSON" -o docs/bdd
 
       - name: Create docs index
@@ -73,7 +72,7 @@ jobs:
           mkdir -p docs
           cat > docs/index.html <<'HTML'
           <html><head><meta charset="utf-8"><title>Reportes</title></head><body>
-          <h1>Reportes de Pruebas</h1>
+          <h1>Reportes de Pruebas (Transport)</h1>
           <ul>
             <li><a href="coverage/index.html">Cobertura (coverlet)</a></li>
             <li><a href="bdd/index.html">BDD LivingDoc</a></li>
@@ -89,3 +88,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
