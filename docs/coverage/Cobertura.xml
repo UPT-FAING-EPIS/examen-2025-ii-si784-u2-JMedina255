@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<coverage line-rate="1" branch-rate="1" lines-covered="5" lines-valid="5" branches-covered="2" branches-valid="2" complexity="5" version="0" timestamp="1761964955">
+  <sources>
+    <source>C:\</source>
+  </sources>
+  <packages>
+    <package name="App.Core" line-rate="1" branch-rate="1" complexity="5">
+      <classes>
+        <class name="App.Core.Calculator" filename="C:\Users\HP\Desktop\calidadypruebas\examen-2025-ii-si784-u2-JMedina255\src\App.Core\Calculator.cs" line-rate="1" branch-rate="1" complexity="5">
+          <methods>
+            <method name="Add" signature="(System.Int32,System.Int32)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="5" hits="2" branch="false" />
+              </lines>
+            </method>
+            <method name="Subtract" signature="(System.Int32,System.Int32)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="6" hits="2" branch="false" />
+              </lines>
+            </method>
+            <method name="Multiply" signature="(System.Int32,System.Int32)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="2" branch="false" />
+              </lines>
+            </method>
+            <method name="Divide" signature="(System.Int32,System.Int32)" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="10" hits="6" branch="true" condition-coverage="100% (2/2)" />
+                <line number="11" hits="2" branch="false" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="5" hits="2" branch="false" />
+            <line number="6" hits="2" branch="false" />
+            <line number="7" hits="2" branch="false" />
+            <line number="10" hits="6" branch="true" condition-coverage="100% (2/2)" />
+            <line number="11" hits="2" branch="false" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>

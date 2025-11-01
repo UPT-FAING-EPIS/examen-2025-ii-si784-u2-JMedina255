@@ -1,0 +1,43 @@
+name: UI - Playwright (2 browsers)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore & build (solution)
+        run: |
+          dotnet restore examen-2025-ii-si784-u2-JMedina255.sln
+          dotnet build examen-2025-ii-si784-u2-JMedina255.sln -c Release
+
+      - name: Install Playwright browsers
+        shell: bash
+        run: |
+          dotnet build tests/App.UI/App.UI.csproj -c Release
+          pwsh ./tests/App.UI/bin/Release/net8.0/playwright.ps1 install --with-deps
+
+      - name: Start Web App
+        shell: bash
+        run: |
+          dotnet run --project src/App.Web/App.Web.csproj --urls http://localhost:5187 &
+          for i in {1..30}; do if curl -sSf http://localhost:5187 >/dev/null; then echo "App ready"; break; fi; sleep 1; done
+
+      - name: Run UI tests (${{ matrix.browser }})
+        env:
+          BROWSER: ${{ matrix.browser }}
+        run: dotnet test tests/App.UI/App.UI.csproj -c Release --logger "trx;LogFileName=ui-${{ matrix.browser }}.trx"
